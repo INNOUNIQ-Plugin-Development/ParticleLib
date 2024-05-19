@@ -1041,7 +1041,7 @@ public enum ParticleEffect {
      * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    SPELL_MOB_AMBIENT(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB_AMBIENT" : "ambient_entity_effect"), COLORABLE),
+    SPELL_MOB_AMBIENT(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB_AMBIENT" : (version < 20.5 ? "ambient_entity_effect" : "entity_effect")), COLORABLE),
     /**
      * In vanilla, this particle is displayed randomly by witches.
      * <p>
