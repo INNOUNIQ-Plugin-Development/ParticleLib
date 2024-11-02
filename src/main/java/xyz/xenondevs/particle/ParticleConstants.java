@@ -212,6 +212,7 @@ public final class ParticleConstants {
      * Represents the MinecraftKey constructor.
      */
     public static final Constructor MINECRAFT_KEY_CONSTRUCTOR;
+    public static final Method MINECRAFT_KEY_METHOD;
     /**
      * Represents the Vector3fa constructor.
      */
@@ -329,8 +330,14 @@ public final class ParticleConstants {
             PACKET_PLAY_OUT_WORLD_PARTICLES_CONSTRUCTOR = getConstructorOrNull(PACKET_PLAY_OUT_WORLD_PARTICLES_CLASS, PARTICLE_PARAM_CLASS, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class);
         else
             PACKET_PLAY_OUT_WORLD_PARTICLES_CONSTRUCTOR = getConstructorOrNull(PACKET_PLAY_OUT_WORLD_PARTICLES_CLASS, PARTICLE_PARAM_CLASS, boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class);
-        
-        MINECRAFT_KEY_CONSTRUCTOR = getConstructorOrNull(MINECRAFT_KEY_CLASS, String.class);
+
+        if (version < 21) {
+            MINECRAFT_KEY_CONSTRUCTOR = getConstructorOrNull(MINECRAFT_KEY_CLASS, String.class);
+            MINECRAFT_KEY_METHOD = null;
+        } else {
+            MINECRAFT_KEY_CONSTRUCTOR = null;
+            MINECRAFT_KEY_METHOD = getMappedMethod(MINECRAFT_KEY_CLASS, "MinecraftKey.initMethod", String.class);
+        }
         VECTOR_3FA_CONSTRUCTOR = getConstructorOrNull(VECTOR_3FA_CLASS, float.class, float.class, float.class);
         BLOCK_POSITION_CONSTRUCTOR = getConstructorOrNull(BLOCK_POSITION_CLASS, double.class, double.class, double.class);
         BLOCK_POSITION_SOURCE_CONSTRUCTOR = version < 17 ? null : getConstructorOrNull(BLOCK_POSITION_SOURCE_CLASS, BLOCK_POSITION_CLASS);

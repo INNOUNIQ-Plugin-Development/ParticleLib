@@ -432,7 +432,11 @@ public final class ReflectionUtils {
         if (key == null)
             return null;
         try {
-            return ParticleConstants.MINECRAFT_KEY_CONSTRUCTOR.newInstance(key);
+            if (MINECRAFT_VERSION < 21) {
+                return ParticleConstants.MINECRAFT_KEY_CONSTRUCTOR.newInstance(key);
+            }
+
+            return ParticleConstants.MINECRAFT_KEY_METHOD.invoke(null, key);
         } catch (Exception ex) {
             return null;
         }

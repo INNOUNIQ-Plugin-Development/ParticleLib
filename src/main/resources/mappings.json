@@ -423,6 +423,10 @@
       {
         "from": 20,
         "value": "c"
+      },
+      {
+        "from": 21.2,
+        "value": "f"
       }
     ]
   },
@@ -510,6 +514,10 @@
       {
         "from": 20.3,
         "value": "j"
+      },
+      {
+        "from": 21.0,
+        "value": "i"
       }
     ]
   },
@@ -525,6 +533,17 @@
       {
         "from": 20.3,
         "value": "e"
+      }
+    ]
+  },
+  {
+    "name": "MinecraftKey.initMethod",
+    "min": 21,
+    "max": 99,
+    "mappings": [
+      {
+        "from": 21.0,
+        "value": "a"
       }
     ]
   }
