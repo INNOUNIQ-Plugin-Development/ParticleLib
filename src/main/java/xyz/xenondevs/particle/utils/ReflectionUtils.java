@@ -38,6 +38,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -49,9 +51,9 @@ import static xyz.xenondevs.particle.ParticleConstants.BLOCK_POSITION_CONSTRUCTO
  * @since 30.08.2018
  */
 public final class ReflectionUtils {
-    
+
     /* ---------------- NMS & CB paths ---------------- */
-    
+
     /**
      * Represents the net minecraft server path
      * <p>
@@ -64,15 +66,15 @@ public final class ReflectionUtils {
      * e.g. {@code org.bukkit.craftbukkit.v1_8_R3}, {@code org.bukkit.craftbukkit.v1_12_R1}
      */
     private static final String CRAFT_BUKKIT_PACKAGE_PATH;
-    
+
     /**
      * The current Minecraft version as an int.
      */
     public static final double MINECRAFT_VERSION; // TODO switch to version object
-    
+
     /* ---------------- ClassLoader reflection ---------------- */
     // These can't be in ParticleConstants because it indirectly depends on ReflectionUtils
-    
+
     /**
      * Represents the PluginClassLoader class.
      */
@@ -81,29 +83,56 @@ public final class ReflectionUtils {
      * Represents the PluginClassLoader#plugin field.
      */
     private static final Field PLUGIN_CLASS_LOADER_PLUGIN_FIELD = getFieldOrNull(PLUGIN_CLASS_LOADER_CLASS, "plugin", true);
-    
+
     /* ---------------- PlayerConnection caching ---------------- */
-    
+
     /**
      * A cache for playerconnections.
      */
     public static final PlayerConnectionCache PLAYER_CONNECTION_CACHE;
-    
+
     /* ---------------- Library info ---------------- */
-    
+
     /**
      * The current {@link Plugin} using ParticleLib.
      */
     private static Plugin plugin;
-    
+
     /**
      * ZipFile containing ParticleLib.
      */
     private static final ZipFile zipFile;
-    
+
+    private enum ServerVersion {
+        v1_20_R4(Arrays.asList("1.20.5-R0.1-SNAPSHOT", "1.20.6-R0.1-SNAPSHOT")),
+        v1_21_R1(Arrays.asList("1.21-R0.1-SNAPSHOT", "1.21.1-R0.1-SNAPSHOT")),
+        v1_21_R2(Arrays.asList("1.21.2-R0.1-SNAPSHOT", "1.21.3-R0.1-SNAPSHOT")),
+        ;
+
+        private final List<String> IBVs;
+
+        ServerVersion(final List<String> IBVs) {
+            this.IBVs = IBVs;
+        }
+
+        public List<String> getIncludedBukkitVersions() {
+            return IBVs;
+        }
+
+        public static ServerVersion getByBukkitVersion(final String BV) {
+            return Arrays.stream(ServerVersion.values())
+                    .filter(SV -> SV.getIncludedBukkitVersions().contains(BV))
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
     static {
         String serverPath = Bukkit.getServer().getClass().getPackage().getName();
         String version = serverPath.substring(serverPath.lastIndexOf(".") + 1);
+        if (version.equals("craftbukkit")) {
+            version = ServerVersion.getByBukkitVersion(Bukkit.getBukkitVersion()).name();
+        }
         String bukkitVersion = Bukkit.getBukkitVersion();
         int dashIndex = bukkitVersion.indexOf("-");
         MINECRAFT_VERSION = Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length()));
@@ -117,7 +146,7 @@ public final class ReflectionUtils {
             throw new IllegalStateException("Error while finding zip file", ex);
         }
     }
-    
+
     /**
      * Gets the plugin ParticleLib uses to register
      * event {@link Listener Listeners} and start
@@ -128,7 +157,7 @@ public final class ReflectionUtils {
     public static Plugin getPlugin() {
         return plugin;
     }
-    
+
     /**
      * Sets the plugin ParticleLib uses to register
      * event {@link Listener Listeners} and start
@@ -142,7 +171,7 @@ public final class ReflectionUtils {
         if (wasNull)
             PLAYER_CONNECTION_CACHE.registerListener();
     }
-    
+
     /**
      * Gets a class but returns null instead of throwing
      * a {@link ClassNotFoundException}.
@@ -157,7 +186,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Gets the nms path of a class without depending on versions
      * <p>
@@ -172,7 +201,7 @@ public final class ReflectionUtils {
     public static String getNMSPath(String path) {
         return getNetMinecraftServerPackagePath() + "." + path;
     }
-    
+
     /**
      * Directly gets the class object over the path
      *
@@ -182,7 +211,7 @@ public final class ReflectionUtils {
     public static Class<?> getNMSClass(String path) {
         return getClassSafe(getNMSPath(path));
     }
-    
+
     /**
      * Gets the craftbukkit path of a class without depending on versions
      * <p>
@@ -196,7 +225,7 @@ public final class ReflectionUtils {
     public static String getCraftBukkitPath(String path) {
         return getCraftBukkitPackagePath() + "." + path;
     }
-    
+
     /**
      * Method to directly get the class object over the path
      *
@@ -206,7 +235,7 @@ public final class ReflectionUtils {
     public static Class<?> getCraftBukkitClass(String path) {
         return getClassSafe(getCraftBukkitPath(path));
     }
-    
+
     /**
      * Method to not get disturbed by the forced try catch block
      *
@@ -222,7 +251,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Method to not get disturbed by the forced try catch block
      *
@@ -238,7 +267,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Gets a constructor without throwing exceptions
      *
@@ -253,7 +282,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Checks if a class exists
      *
@@ -269,7 +298,7 @@ public final class ReflectionUtils {
             return false;
         }
     }
-    
+
     /**
      * Gets the specified Field over the specified fieldName and the given targetClass. Then reads the specified
      * {@link Field} from the specified {@link Object}. When the {@link Field} is static
@@ -285,7 +314,7 @@ public final class ReflectionUtils {
             return null;
         return readField(getFieldOrNull(targetClass, fieldName, false), object);
     }
-    
+
     /**
      * Reads the specified {@link Field} from the specified {@link Object}. When the
      * {@link Field} is static set the object to {@code null}.
@@ -303,7 +332,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Gets the specified declared Field over  the specified fieldName and the given
      * targetClass. Then reads the specified {@link Field} from the specified
@@ -319,7 +348,7 @@ public final class ReflectionUtils {
             return null;
         return readDeclaredField(getFieldOrNull(targetClass, fieldName, true), object);
     }
-    
+
     /**
      * Reads the declared specified {@link Field} from the specified {@link Object}.
      * When the {@link Field} is static set the object to {@code null}.
@@ -338,7 +367,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Gets the specified declared {@link Field} over the specified fieldName and the given
      * targetClass. Then writes the specified value into the specified {@link Field}
@@ -354,7 +383,7 @@ public final class ReflectionUtils {
             return;
         writeDeclaredField(getFieldOrNull(targetClass, fieldName, true), object, value);
     }
-    
+
     /**
      * Writes a value to the specified declared {@link Field} in the
      * given {@link Object}.
@@ -372,7 +401,7 @@ public final class ReflectionUtils {
         } catch (Exception ignored) {
         }
     }
-    
+
     /**
      * Gets the specified {@link Field} over the specified fieldName and the given
      * targetClass. Then writes the specified value into the specified {@link Field}
@@ -388,7 +417,7 @@ public final class ReflectionUtils {
             return;
         writeField(getFieldOrNull(targetClass, fieldName, false), object, value);
     }
-    
+
     /**
      * Writes a value to the specified {@link Field} in the given
      * {@link Object}.
@@ -405,21 +434,21 @@ public final class ReflectionUtils {
         } catch (Exception ignored) {
         }
     }
-    
+
     /**
      * @return the nms path
      */
     public static String getNetMinecraftServerPackagePath() {
         return NET_MINECRAFT_SERVER_PACKAGE_PATH;
     }
-    
+
     /**
      * @return the craftbukkit path
      */
     public static String getCraftBukkitPackagePath() {
         return CRAFT_BUKKIT_PACKAGE_PATH;
     }
-    
+
     /**
      * Creates a new MinecraftKey with the given data.
      *
@@ -441,7 +470,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Creates a new Vector3fa instance.
      *
@@ -457,7 +486,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Creates a new BlockPosition.
      *
@@ -471,7 +500,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Gets the Entity instance of a CraftEntity
      *
@@ -487,7 +516,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Gets the EntityPlayer instance of a CraftPlayer
      *
@@ -503,7 +532,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Gets the PlayerConnection of a {@link Player}
      *
@@ -517,7 +546,7 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
     /**
      * Sends a packet to a defined player.
      *
@@ -531,7 +560,7 @@ public final class ReflectionUtils {
         } catch (Exception ignored) {
         }
     }
-    
+
     /**
      * Gets the {@link InputStream} of a resource.
      *
@@ -548,5 +577,5 @@ public final class ReflectionUtils {
             return null;
         }
     }
-    
+
 }
