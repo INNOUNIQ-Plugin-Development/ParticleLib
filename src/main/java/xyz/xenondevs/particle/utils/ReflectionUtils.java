@@ -39,6 +39,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -107,6 +108,7 @@ public final class ReflectionUtils {
         v1_20_R4(Arrays.asList("1.20.5-R0.1-SNAPSHOT", "1.20.6-R0.1-SNAPSHOT")),
         v1_21_R1(Arrays.asList("1.21-R0.1-SNAPSHOT", "1.21.1-R0.1-SNAPSHOT")),
         v1_21_R2(Arrays.asList("1.21.2-R0.1-SNAPSHOT", "1.21.3-R0.1-SNAPSHOT")),
+        v1_21_R3(Collections.singletonList("1.21.4-R0.1-SNAPSHOT")),
         ;
 
         private final List<String> IBVs;
