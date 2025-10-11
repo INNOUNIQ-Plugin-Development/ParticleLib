@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>xyz.xenondevs</groupId>
     <artifactId>particle</artifactId>
-    <version>1.17.0</version>
+    <version>1.18.0</version>
     <packaging>jar</packaging>
 
     <name>ParticleLib</name>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <version>1.21.10-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
