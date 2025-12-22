@@ -41,6 +41,10 @@
       {
         "from": 17,
         "value": "network.protocol.game.PacketPlayOutWorldParticles"
+      },
+      {
+        "from": 81.11,
+        "value": "network.protocol.game.ClientboundLevelParticlesPacket"
       }
     ]
   },
@@ -67,6 +71,10 @@
       {
         "from": 17,
         "value": "core.particles.Particle"
+      },
+      {
+        "from": 81.11,
+        "value": "core.particles.ParticleType"
       }
     ]
   },
@@ -82,6 +90,10 @@
       {
         "from": 17,
         "value": "resources.MinecraftKey"
+      },
+      {
+        "from": 81.11,
+        "value": "resources.Identifier"
       }
     ]
   },
@@ -97,6 +109,10 @@
       {
         "from": 17,
         "value": "core.IRegistry"
+      },
+      {
+        "from": 81.11,
+        "value": "core.Registry"
       }
     ]
   },
@@ -127,6 +143,10 @@
       {
         "from": 17,
         "value": "core.BlockPosition"
+      },
+      {
+        "from": 81.11,
+        "value": "core.BlockPos"
       }
     ]
   },
@@ -142,6 +162,10 @@
       {
         "from": 17,
         "value": "world.level.block.state.IBlockData"
+      },
+      {
+        "from": 81.11,
+        "value": "world.level.block.state.BlockState"
       }
     ]
   },
@@ -220,6 +244,10 @@
       {
         "from": 17,
         "value": "server.level.EntityPlayer"
+      },
+      {
+        "from": 81.11,
+        "value": "server.level.ServerPlayer"
       }
     ]
   },
@@ -235,6 +263,10 @@
       {
         "from": 17,
         "value": "server.network.PlayerConnection"
+      },
+      {
+        "from": 81.11,
+        "value": "server.network.ServerGamePacketListenerImpl"
       }
     ]
   },
@@ -250,6 +282,10 @@
       {
         "from": 17,
         "value": "core.particles.ParticleParam"
+      },
+      {
+        "from": 81.11,
+        "value": "core.particles.ParticleOptions"
       }
     ]
   },
@@ -265,6 +301,10 @@
       {
         "from": 17,
         "value": "core.particles.ParticleParamRedstone"
+      },
+      {
+        "from": 81.11,
+        "value": "core.particles.DustParticleOptions"
       }
     ]
   },
@@ -291,6 +331,10 @@
       {
         "from": 17,
         "value": "core.particles.ParticleParamBlock"
+      },
+      {
+        "from": 81.11,
+        "value": "core.particles.BlockParticleOption"
       }
     ]
   },
@@ -306,6 +350,10 @@
       {
         "from": 17,
         "value": "core.particles.ParticleParamItem"
+      },
+      {
+        "from": 81.11,
+        "value": "core.particles.ItemParticleOption"
       }
     ]
   },
@@ -354,6 +402,10 @@
       {
         "from": 18,
         "value": "a"
+      },
+      {
+        "from": 81.11,
+        "value": "getValue"
       }
     ]
   },
@@ -373,6 +425,10 @@
       {
         "from": 20.2,
         "value": "b"
+      },
+      {
+        "from": 81.11,
+        "value": "send"
       }
     ]
   },
@@ -431,6 +487,10 @@
       {
         "from": 21.5,
         "value": "g"
+      },
+      {
+        "from": 81.11,
+        "value": "connection"
       }
     ]
   },
@@ -530,6 +590,10 @@
       {
         "from": 71.1,
         "value": "j"
+      },
+      {
+        "from": 81.11,
+        "value": "PARTICLE_TYPE"
       }
     ]
   },
@@ -545,6 +609,10 @@
       {
         "from": 20.3,
         "value": "e"
+      },
+      {
+        "from": 81.11,
+        "value": "BLOCK"
       }
     ]
   },
@@ -556,6 +624,10 @@
       {
         "from": 21.0,
         "value": "a"
+      },
+      {
+        "from": 81.11,
+        "value": "parse"
       }
     ]
   }

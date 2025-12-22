@@ -133,24 +133,50 @@ public final class ReflectionUtils {
         }
     }
 
+    private enum ServerType {
+        SPIGOT,
+        PAPER,
+        ;
+
+        public boolean isSpigot() {
+            return this == SPIGOT;
+        }
+
+        public boolean isPaper() {
+            return this == PAPER;
+        }
+    }
+
     static {
         String serverPath = Bukkit.getServer().getClass().getPackage().getName();
         String version = serverPath.substring(serverPath.lastIndexOf(".") + 1);
         if (version.equals("craftbukkit")) {
             version = ServerVersion.getByBukkitVersion(Bukkit.getBukkitVersion()).name();
         }
+
+        ServerType serverType = loadServerType();
+
         String bukkitVersion = Bukkit.getBukkitVersion();
         int dashIndex = bukkitVersion.indexOf("-");
         //If SubVersion is more or equal than 10, add 50...
-        MINECRAFT_VERSION = Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length())) + (dashIndex > 6 ? 50 : 0);
+        MINECRAFT_VERSION = Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length())) + (dashIndex > 6 ? (serverType.isPaper() ? 60 : 50) : 0);
         NET_MINECRAFT_SERVER_PACKAGE_PATH = "net.minecraft" + (MINECRAFT_VERSION < 17 ? ".server." + version : "");
-        CRAFT_BUKKIT_PACKAGE_PATH = "org.bukkit.craftbukkit." + version;
+        CRAFT_BUKKIT_PACKAGE_PATH = MINECRAFT_VERSION >= 81.11 ? "org.bukkit.craftbukkit" : "org.bukkit.craftbukkit." + version;
         plugin = readDeclaredField(PLUGIN_CLASS_LOADER_PLUGIN_FIELD, ReflectionUtils.class.getClassLoader());
         PLAYER_CONNECTION_CACHE = new PlayerConnectionCache();
         try {
             zipFile = new ZipFile(ReflectionUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
         } catch (IOException | URISyntaxException ex) {
             throw new IllegalStateException("Error while finding zip file", ex);
+        }
+    }
+
+    private static ServerType loadServerType() {
+        try {
+            Class.forName("com.destroystokyo.paper.ParticleBuilder");
+            return ServerType.PAPER;
+        } catch (final ClassNotFoundException e) {
+            return Bukkit.getVersion().toLowerCase().contains("paper") ? ServerType.PAPER : ServerType.SPIGOT;
         }
     }
 
