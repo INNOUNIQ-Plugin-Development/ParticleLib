@@ -159,7 +159,7 @@ public final class ReflectionUtils {
         String bukkitVersion = Bukkit.getBukkitVersion();
         int dashIndex = bukkitVersion.indexOf("-");
         //If SubVersion is more or equal than 10, add 50...
-        MINECRAFT_VERSION = Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length())) + (dashIndex > 6 ? (serverType.isPaper() ? 60 : 50) : 0);
+        MINECRAFT_VERSION = Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length())) + (dashIndex > 6 ? 50 : 0);
         NET_MINECRAFT_SERVER_PACKAGE_PATH = "net.minecraft" + (MINECRAFT_VERSION < 17 ? ".server." + version : "");
         CRAFT_BUKKIT_PACKAGE_PATH = MINECRAFT_VERSION >= 81.11 ? "org.bukkit.craftbukkit" : "org.bukkit.craftbukkit." + version;
         plugin = readDeclaredField(PLUGIN_CLASS_LOADER_PLUGIN_FIELD, ReflectionUtils.class.getClassLoader());
