@@ -113,6 +113,8 @@ public final class ReflectionUtils {
         v1_21_R5(Arrays.asList("1.21.6-R0.1-SNAPSHOT", "1.21.7-R0.1-SNAPSHOT", "1.21.8-R0.1-SNAPSHOT")),
         v1_21_R6(Arrays.asList("1.21.9-R0.1-SNAPSHOT", "1.21.10-R0.1-SNAPSHOT")),
         v1_21_R7(Collections.singletonList("1.21.11-R0.1-SNAPSHOT")),
+        v26_1(Arrays.asList("26.1-R0.1-SNAPSHOT", "26.1.1-R0.1-SNAPSHOT", "26.1.2-R0.1-SNAPSHOT", "26.1.*")),
+        v26_2(Arrays.asList("26.2-R0.1-SNAPSHOT", "26.2.*")),
         ;
 
         private final List<String> IBVs;
@@ -125,9 +127,13 @@ public final class ReflectionUtils {
             return IBVs;
         }
 
+        public boolean isLaterOrEqual(final ServerVersion V) {
+            return this.ordinal() >= V.ordinal();
+        }
+
         public static ServerVersion getByBukkitVersion(final String BV) {
             return Arrays.stream(ServerVersion.values())
-                    .filter(SV -> SV.getIncludedBukkitVersions().contains(BV))
+                    .filter(SV -> SV.getIncludedBukkitVersions().stream().anyMatch(BV::matches))
                     .findFirst()
                     .orElse(null);
         }
@@ -159,7 +165,8 @@ public final class ReflectionUtils {
         String bukkitVersion = Bukkit.getBukkitVersion();
         int dashIndex = bukkitVersion.indexOf("-");
         //If SubVersion is more or equal than 10, add 50...
-        MINECRAFT_VERSION = Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length())) + (dashIndex > 6 ? 50 : 0);
+        MINECRAFT_VERSION = bukkitVersion.startsWith("26") ? 26 + 60 :
+                Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length())) + (dashIndex > 6 ? 50 : 0);
         NET_MINECRAFT_SERVER_PACKAGE_PATH = "net.minecraft" + (MINECRAFT_VERSION < 17 ? ".server." + version : "");
         CRAFT_BUKKIT_PACKAGE_PATH = MINECRAFT_VERSION >= 81.11 ? "org.bukkit.craftbukkit" : "org.bukkit.craftbukkit." + version;
         plugin = readDeclaredField(PLUGIN_CLASS_LOADER_PLUGIN_FIELD, ReflectionUtils.class.getClassLoader());
