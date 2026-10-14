@@ -115,6 +115,7 @@ public final class ReflectionUtils {
         v1_21_R7(Collections.singletonList("1.21.11-R0.1-SNAPSHOT")),
         v26_1(Arrays.asList("26.1-R0.1-SNAPSHOT", "26.1.1-R0.1-SNAPSHOT", "26.1.2-R0.1-SNAPSHOT", "26.1.*")),
         v26_2(Arrays.asList("26.2-R0.1-SNAPSHOT", "26.2.*")),
+        v26_3(Arrays.asList("26.3-R0.1-SNAPSHOT", "26.3.*")),
         ;
 
         private final List<String> IBVs;
